@@ -6,7 +6,6 @@
 #include <stdbool.h>
 
 #define L_STR 1024
-#define MAX_DIM_ARRAY 1024
 
 typedef char String[L_STR];
 
@@ -60,7 +59,6 @@ void setFloat(int* k, String s, float* n) {
     int div;
 
     while(s[*k] != ',' && s[*k +1] != '\0') {
-        printf("'%c' - ", s[*k]);
         if(s[*k] == '.') {
             div = 10;
             virgolaPassata = true;
@@ -119,7 +117,6 @@ int main() {
     while(!feof(fp)) {
         fflush(fp);
         fgets(riga, L_STR, fp);
-
         nRighe ++;
     }
     fclose(fp);
