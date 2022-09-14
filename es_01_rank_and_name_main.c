@@ -24,45 +24,6 @@ typedef struct {
     float Global_Sales;
 } Vgsales;
 
-int charToInt(char c) {
-    if(c == '0')
-        return 0;
-    else if(c == '1')
-        return 1;
-    else if(c == '2')
-        return 2;
-    else if(c == '3')
-        return 3;
-    else if(c == '4')
-        return 4;
-    else if(c == '5')
-        return 5;
-    else if(c == '6')
-        return 6;
-    else if(c == '7')
-        return 7;
-    else if(c == '8')
-        return 8;
-    else
-        return 9;
-}
-
-void setrankAndName(char *s, Vgsales *v) {
-    int k = 0, c = 0;
-    v->rank = 0;
-    while(s[k] != ',') {
-        v->rank = v->rank * 10 + charToInt(s[k]);
-        k ++;
-    }
-    k ++;
-    while(s[k] != ',') {
-        v->name[c] = s[k];
-        c ++;
-        k ++;
-    }
-    v->name[c] = '\0';
-}
-
 int main() {
     FILE* fp = fopen("vgsales.csv", "r");
     if(fp == NULL) {
@@ -91,8 +52,13 @@ int main() {
     }
     fgets(riga, L_STR, fp);
     for(int k = 0; k < nRighe; k ++) {
+        fscanf(fp, "%d,", &arr[k].rank);
         fgets(riga, L_STR, fp);
-        setrankAndName(riga, &arr[k]);
+        int c = 0;
+        while (riga[c] != ',') {
+            arr[k].name[c] = riga[c];
+            c ++;
+        }
     }
     fclose(fp);
 
