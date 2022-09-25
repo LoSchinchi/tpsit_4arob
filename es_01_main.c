@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAXGAME 1024
+#define MAXGAME 20
 #define L_STR 1024
 
 typedef char* String;
@@ -46,30 +46,38 @@ void gameWitEUhSalesMaxPerPublisher(Vgsales arr[], int dim, String publisher) {
         printf("\nIl massimo delle vendite in europa per un gioco %s in base alle vendite totali sono del gioco \"%s\"\n",publisher, t.name);
 }
 
+Vgsales split(String s) {
+    Vgsales vg;
+
+    vg.rank = atoi(strtok(s, ","));
+    vg.name = strtok(NULL, ",");
+    vg.platform = strtok(NULL, ",");
+    vg.year = atoi(strtok(NULL, ","));
+    vg.genre = strtok(NULL, ",");
+    vg.publisher = strtok(NULL, ",");
+    vg.NA_Sales = atof(strtok(NULL, ","));
+    vg.EU_Sales = atof(strtok(NULL, ","));
+    vg.JP_Sales = atof(strtok(NULL, ","));
+    vg.Other_Sales = atof(strtok(NULL, ","));
+    vg.Global_Sales = atof(strtok(NULL, ","));
+
+    return vg;
+}
+
 int main() {
     FILE* fp = fopen("vgsales.csv", "r");
     if(fp == NULL)
         return 0;
 
-    String riga;
+    //String riga;
+    char riga[L_STR];
     Vgsales vg[MAXGAME];
     int k = 0;
     fgets(riga, L_STR, fp);
 
     while(!feof(fp) && k < MAXGAME) {
         fgets(riga, L_STR, fp);
-
-        vg[k].rank = atoi(strtok(riga, ","));
-        vg[k].name = strtok(NULL, ",");
-        vg[k].platform = strtok(NULL, ",");
-        vg[k].year = atoi(strtok(NULL, ","));
-        vg[k].genre = strtok(NULL, ",");
-        vg[k].publisher = strtok(NULL, ",");
-        vg[k].NA_Sales = atof(strtok(NULL, ","));
-        vg[k].EU_Sales = atof(strtok(NULL, ","));
-        vg[k].JP_Sales = atof(strtok(NULL, ","));
-        vg[k].Other_Sales = atof(strtok(NULL, ","));
-        vg[k].Global_Sales = atof(strtok(NULL, ","));
+        vg[k] = split(riga);
 
         printf("%d,%s,%s,%d,%s,%s,%.2f,%.2f,%.2f,%.2f,%.2f\n",
                vg[k].rank, vg[k].name, vg[k].platform, vg[k].year,
