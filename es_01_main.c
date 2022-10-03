@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAXGAME 20
+#define MAXGAME 64
 #define L_STR 1024
 
 typedef char* String;
@@ -26,17 +26,17 @@ typedef struct {
     float Global_Sales;
 } Vgsales;
 
-void gameWitEUhSalesMaxPerPublisher(Vgsales arr[], int dim, String publisher) {
+void gameWitEUhSalesMaxPerPublisher(Vgsales* arr, int dim, String publisher) {
     bool primoUscito = false;
     Vgsales t;
 
     for (int k = 0; k < dim; k++) {
-        if (!strcmp(publisher, arr[k].publisher)) {
+        if (!strcmp(publisher, (*(arr + k)).publisher)) {
             if (!primoUscito) {
-                t = arr[k];
+                t = (*(arr + k));
                 primoUscito = true;
-            } else if (arr[k].Global_Sales / arr[k].EU_Sales > t.Global_Sales / t.EU_Sales)
-                t = arr[k];
+            } else if ((arr + k)->Global_Sales / (arr + k)->EU_Sales > t.Global_Sales / t.EU_Sales)
+                t = (*(arr + k));
         }
     }
 
@@ -55,11 +55,11 @@ Vgsales split(String s) {
     vg.year = atoi(strtok(NULL, ","));
     vg.genre = strtok(NULL, ",");
     vg.publisher = strtok(NULL, ",");
-    vg.NA_Sales = atof(strtok(NULL, ","));
-    vg.EU_Sales = atof(strtok(NULL, ","));
-    vg.JP_Sales = atof(strtok(NULL, ","));
-    vg.Other_Sales = atof(strtok(NULL, ","));
-    vg.Global_Sales = atof(strtok(NULL, ","));
+    vg.NA_Sales = (float)atof(strtok(NULL, ","));
+    vg.EU_Sales = (float)atof(strtok(NULL, ","));
+    vg.JP_Sales = (float)atof(strtok(NULL, ","));
+    vg.Other_Sales = (float)atof(strtok(NULL, ","));
+    vg.Global_Sales = (float)atof(strtok(NULL, ","));
 
     return vg;
 }
@@ -69,20 +69,20 @@ int main() {
     if(fp == NULL)
         return 0;
 
-    //String riga;
-    char riga[L_STR];
-    Vgsales vg[MAXGAME];
+    char c[L_STR];
+    char* riga = c;
+    Vgsales vgS[MAXGAME];
+    Vgsales* vg = vgS;
+
     int k = 0;
     fgets(riga, L_STR, fp);
 
     while(!feof(fp) && k < MAXGAME) {
-        fgets(riga, L_STR, fp);
-        vg[k] = split(riga);
-
+        *(vg + k) = split(fgets(riga, L_STR, fp));
         printf("%d,%s,%s,%d,%s,%s,%.2f,%.2f,%.2f,%.2f,%.2f\n",
-               vg[k].rank, vg[k].name, vg[k].platform, vg[k].year,
-               vg[k].genre, vg[k].publisher, vg[k].NA_Sales, vg[k].EU_Sales,
-               vg[k].JP_Sales, vg[k].Other_Sales, vg[k].Global_Sales);
+               (vg + k)->rank, (vg + k)->name, (vg + k)->platform, (vg + k)->year,
+               (vg + k)->genre, (vg + k)->publisher, (vg + k)->NA_Sales, (vg + k)->EU_Sales,
+               (vg + k)->JP_Sales, (vg + k)->Other_Sales, (vg + k)->Global_Sales);
         k ++;
     }
 
