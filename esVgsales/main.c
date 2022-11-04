@@ -61,7 +61,6 @@ int main() {
 
     FILE* fp = fopen("vgsales.csv", "r");
     fgets(riga, L_STR, fp);
-    free(riga);
 
     while(!feof(fp) && p - vg < _dim) {
         riga = (String) malloc(sizeof(char) * L_STR);
@@ -72,11 +71,10 @@ int main() {
                p->rank, p->name, p->platform, p->year,
                p->genre, p->publisher, p->NA_Sales, p->EU_Sales,
                p->JP_Sales, p->Other_Sales, p->Global_Sales);
-
-        free(riga);
         p ++;
     }
 
+    free(riga);
     free(vg);
     fclose(fp);
 
